@@ -1,0 +1,10 @@
+{
+  "name": "swap",
+  "version": "1.0.0",
+  "description": "Swap meet app for lurkers and vendors alike",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
