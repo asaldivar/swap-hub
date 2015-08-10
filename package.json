@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "Swap meet app for lurkers and vendors alike",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "react-router": "^0.13.3"
   },
   "devDependencies": {
     "babel-core": "^5.8.20",
