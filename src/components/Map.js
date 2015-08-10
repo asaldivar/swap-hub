@@ -4,7 +4,7 @@ var RouteHandler = require('react-router').RouteHandler;
 var Map = React.createClass({
   render: function() {
     return (
-      <div id="map-canvas" style={{width: '100%', height: '100%', border: '1px solid red'}}>
+      <div id="map-canvas" style={{width: '100%', height: '100%'}}>
       </div>
     );
   },

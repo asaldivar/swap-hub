@@ -23548,8 +23548,8 @@
 
 	var React = __webpack_require__(1);
 	var Main = __webpack_require__(197);
-	var Home = __webpack_require__(198);
-	var Map = __webpack_require__(200);
+	var Home = __webpack_require__(199);
+	var Map = __webpack_require__(201);
 	var Router = __webpack_require__(157);
 	var DefaultRoute = Router.DefaultRoute;
 	var Route = Router.Route;
@@ -23570,7 +23570,7 @@
 	var React = __webpack_require__(1);
 	var Router = __webpack_require__(157);
 	var RouteHandler = Router.RouteHandler;
-	var Locator = __webpack_require__(199);
+	var Locator = __webpack_require__(198);
 
 	var Main = React.createClass({
 	  displayName: 'Main',
@@ -23615,30 +23615,6 @@
 /* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	var React = __webpack_require__(1);
-
-	var Home = React.createClass({
-	  displayName: "Home",
-
-	  render: function render() {
-	    return React.createElement(
-	      "div",
-	      { className: "swap-tiles-container" },
-	      React.createElement("div", { className: "swap-tile" }),
-	      React.createElement("div", { className: "swap-tile" }),
-	      React.createElement("div", { className: "swap-tile" })
-	    );
-	  }
-	});
-
-	module.exports = Home;
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	var React = __webpack_require__(1);
@@ -23665,7 +23641,59 @@
 	module.exports = Locator;
 
 /***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var SwapTiles = __webpack_require__(200);
+
+	var Home = React.createClass({
+	  displayName: 'Home',
+
+	  render: function render() {
+	    return React.createElement(SwapTiles, null);
+	  }
+	});
+
+	module.exports = Home;
+
+/***/ },
 /* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Router = __webpack_require__(157);
+
+	var SwapTile = React.createClass({
+	  displayName: 'SwapTile',
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      swaps: ['Rose Bowl Flea Market', 'Long Beach SoCal Cycle Swap', 'Alexs Bar Record Swap']
+	    };
+	  },
+
+	  render: function render() {
+	    var swaps = this.state.swaps;
+
+	    return React.createElement(
+	      'div',
+	      { className: 'swap-tiles-container' },
+	      swaps.map(function () {
+	        return React.createElement('div', { className: 'swap-tile' });
+	      })
+	    );
+	  }
+	});
+
+	module.exports = SwapTile;
+
+/***/ },
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23677,7 +23705,7 @@
 	  displayName: 'Map',
 
 	  render: function render() {
-	    return React.createElement('div', { id: 'map-canvas', style: { width: '100%', height: '100%', border: '1px solid red' } });
+	    return React.createElement('div', { id: 'map-canvas', style: { width: '100%', height: '100%' } });
 	  },
 
 	  componentDidMount: function componentDidMount() {

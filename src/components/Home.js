@@ -1,13 +1,10 @@
 var React = require('react');
+var SwapTiles = require('./Swap-Tiles');
 
 var Home = React.createClass({
   render: function() {
     return (
-      <div className="swap-tiles-container">
-        <div className="swap-tile"></div>
-        <div className="swap-tile"></div>
-        <div className="swap-tile"></div>
-      </div>
+      <SwapTiles />
     )
   }
 });
