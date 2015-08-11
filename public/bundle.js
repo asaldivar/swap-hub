@@ -23550,15 +23550,18 @@
 	var Main = __webpack_require__(197);
 	var Home = __webpack_require__(199);
 	var Map = __webpack_require__(201);
+	var NotFound = __webpack_require__(203);
 	var Router = __webpack_require__(157);
 	var DefaultRoute = Router.DefaultRoute;
+	var NotFoundRoute = Router.NotFoundRoute;
 	var Route = Router.Route;
 
 	module.exports = React.createElement(
 	  Route,
 	  { name: 'app', path: '/', handler: Main },
-	  React.createElement(Route, { name: 'map', path: 'store-locator', handler: Map }),
-	  React.createElement(DefaultRoute, { name: 'home', handler: Home })
+	  React.createElement(Route, { name: 'map', path: 'store-locator/:location?', handler: Map }),
+	  React.createElement(DefaultRoute, { name: 'home', handler: Home }),
+	  React.createElement(NotFoundRoute, { handler: NotFound })
 	);
 
 /***/ },
@@ -23600,11 +23603,7 @@
 	        ),
 	        React.createElement(Locator, null)
 	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'content' },
-	        React.createElement(RouteHandler, null)
-	      )
+	      React.createElement(RouteHandler, null)
 	    );
 	  }
 	});
@@ -23647,13 +23646,19 @@
 	'use strict';
 
 	var React = __webpack_require__(1);
+	var Intro = __webpack_require__(202);
 	var SwapTiles = __webpack_require__(200);
 
 	var Home = React.createClass({
 	  displayName: 'Home',
 
 	  render: function render() {
-	    return React.createElement(SwapTiles, null);
+	    return React.createElement(
+	      'div',
+	      { className: 'content' },
+	      React.createElement(Intro, null),
+	      React.createElement(SwapTiles, null)
+	    );
 	  }
 	});
 
@@ -23671,20 +23676,38 @@
 	var SwapTile = React.createClass({
 	  displayName: 'SwapTile',
 
+	  // route to individual swap page
+	  // which has map, lists of vendors
+	  // and skinny rectangle between with description of swap
+	  // and directions link
+	  mixins: [Router.Navigation],
+
 	  getInitialState: function getInitialState() {
 	    return {
-	      swaps: ['Rose Bowl Flea Market', 'Long Beach SoCal Cycle Swap', 'Alexs Bar Record Swap']
+	      swaps: [{ name: 'Rose Bowl Flea Market' }, { name: 'Long Beach SoCal Cycle Swap' }, { name: 'Alex\'s Bar Record Swap' }]
 	    };
 	  },
+
+	  goToSwap: function goToSwap() {},
 
 	  render: function render() {
 	    var swaps = this.state.swaps;
 
 	    return React.createElement(
 	      'div',
-	      { className: 'swap-tiles-container' },
-	      swaps.map(function () {
-	        return React.createElement('div', { className: 'swap-tile' });
+	      { className: 'swap-tiles-container', onClick: this.goToSwap },
+	      swaps.map(function (swap, i) {
+	        return React.createElement(
+	          'div',
+	          { key: i, className: 'swap-tile' },
+	          React.createElement(
+	            'div',
+	            { className: 'swap-name' },
+	            ' ',
+	            swap.name,
+	            ' '
+	          )
+	        );
 	      })
 	    );
 	  }
@@ -23699,25 +23722,103 @@
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var RouteHandler = __webpack_require__(157).RouteHandler;
+	var Router = __webpack_require__(157);
 
 	var Map = React.createClass({
 	  displayName: 'Map',
+
+	  mixins: [Router.Navigation, Router.State],
 
 	  render: function render() {
 	    return React.createElement('div', { id: 'map-canvas', style: { width: '100%', height: '100%' } });
 	  },
 
 	  componentDidMount: function componentDidMount() {
-	    var mapOptions = {
-	      center: { lat: 33.7683, lng: -118.1956 },
-	      zoom: 13
-	    };
-	    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	    var location = this.getParams().location;
+	    var geocoder = new google.maps.Geocoder();
+
+	    geocoder.geocode({ address: String(location) }, function (results, status) {
+	      if (status === google.maps.GeocoderStatus.OK) {
+	        console.log('everything is ok');
+	        var lat = results[0].geometry.location.lat(),
+	            lng = results[0].geometry.location.lng();
+	        var center = {
+	          lat: lat,
+	          lng: lng
+	        };
+
+	        var mapOptions = {
+	          center: center,
+	          zoom: 13
+	        };
+	        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	      } else {
+	        console.log('Google maps could not find location');
+	      }
+	    });
 	  }
 	});
 
 	module.exports = Map;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Router = __webpack_require__(157);
+
+	var Intro = React.createClass({
+	  displayName: 'Intro',
+
+	  mixins: [Router.Navigation],
+
+	  findSwap: function findSwap() {
+	    var location = React.findDOMNode(this.refs.location).value;
+
+	    this.transitionTo('map', { location: location });
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'intro-tile' },
+	      React.createElement(
+	        'h2',
+	        { className: 'intro-motto' },
+	        ' Be the first to discover the new old. '
+	      ),
+	      React.createElement('input', { type: 'text', placeholder: 'Where do you want to go?', ref: 'location' }),
+	      React.createElement('input', { type: 'submit', value: 'Search', onClick: this.findSwap })
+	    );
+	  }
+	});
+
+	module.exports = Intro;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var NotFound = React.createClass({
+	  displayName: 'NotFound',
+
+	  render: function render() {
+	    return React.createElement(
+	      'h1',
+	      null,
+	      'Sorry, page doesn\'t exist'
+	    );
+	  }
+	});
+
+	module.exports = NotFound;
 
 /***/ }
 /******/ ]);

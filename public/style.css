@@ -67,6 +67,21 @@ a {
 
 .content > * {
   flex: 1;
+  color: white;
+}
+
+.intro-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #faebd7;
+  text-align: center;
+}
+
+.intro-motto {
+  font-size: 5em;
+  padding: 0 50px;
 }
 
 .swap-tiles-container {
@@ -75,7 +90,35 @@ a {
 }
 
 .swap-tile {
-  flex: 1;
+  padding: 50% 0;
   margin: 5px 0;
-  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #add8e6;
+}
+
+.swap-name {
+  font-size: 4em;
+}
+
+input {
+  font-size: 3.5em;
+  min-width: 65%;
+  height: 110px;
+  margin: 2% 0;
+  border-radius: 7px;
+  text-align: center;
+  color: black;
+}
+
+input[type="submit"] {
+  background:#FF5A5F;
+  border-top: 1px solid #FF5A5F;
+  border-bottom: 1px solid #FF5A5F;
+  color:white;
+}
+
+::-webkit-input-placeholder {
+  text-align: center;
 }

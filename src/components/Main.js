@@ -26,9 +26,7 @@ var Main = React.createClass({
           <Locator />
         </header>
 
-        <div className="content">
-          <RouteHandler />
-        </div>
+        <RouteHandler />
 
       </div>
     )
