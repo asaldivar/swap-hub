@@ -23547,9 +23547,9 @@
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var Main = __webpack_require__(197);
-	var Home = __webpack_require__(199);
-	var Map = __webpack_require__(201);
+	var Main = __webpack_require__(198);
+	var Home = __webpack_require__(200);
+	var Map = __webpack_require__(197);
 	var NotFound = __webpack_require__(203);
 	var Router = __webpack_require__(157);
 	var DefaultRoute = Router.DefaultRoute;
@@ -23572,8 +23572,54 @@
 
 	var React = __webpack_require__(1);
 	var Router = __webpack_require__(157);
+
+	var Map = React.createClass({
+	  displayName: 'Map',
+
+	  mixins: [Router.Navigation, Router.State],
+
+	  render: function render() {
+	    return React.createElement('div', { id: 'map-canvas', style: { width: '100%', height: '100%' } });
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    var location = this.getParams().location;
+	    var geocoder = new google.maps.Geocoder();
+
+	    geocoder.geocode({ address: String(location) }, function (results, status) {
+	      if (status === google.maps.GeocoderStatus.OK) {
+	        console.log('everything is ok');
+	        var lat = results[0].geometry.location.lat(),
+	            lng = results[0].geometry.location.lng();
+	        var center = {
+	          lat: lat,
+	          lng: lng
+	        };
+
+	        var mapOptions = {
+	          center: center,
+	          zoom: 15
+	        };
+	        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	      } else {
+	        console.log('Google maps could not find location');
+	      }
+	    });
+	  }
+	});
+
+	module.exports = Map;
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Router = __webpack_require__(157);
 	var RouteHandler = Router.RouteHandler;
-	var Locator = __webpack_require__(198);
+	var Locator = __webpack_require__(199);
 
 	var Main = React.createClass({
 	  displayName: 'Main',
@@ -23611,7 +23657,7 @@
 	module.exports = Main;
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23640,14 +23686,14 @@
 	module.exports = Locator;
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var Intro = __webpack_require__(202);
-	var SwapTiles = __webpack_require__(200);
+	var Intro = __webpack_require__(201);
+	var SwapTiles = __webpack_require__(202);
 
 	var Home = React.createClass({
 	  displayName: 'Home',
@@ -23665,7 +23711,44 @@
 	module.exports = Home;
 
 /***/ },
-/* 200 */
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Router = __webpack_require__(157);
+
+	var Intro = React.createClass({
+	  displayName: 'Intro',
+
+	  mixins: [Router.Navigation],
+
+	  findSwap: function findSwap() {
+	    var location = React.findDOMNode(this.refs.location).value;
+
+	    this.transitionTo('map', { location: location });
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'intro-tile' },
+	      React.createElement(
+	        'h2',
+	        { className: 'intro-motto' },
+	        ' Be the first to discover the new old. '
+	      ),
+	      React.createElement('input', { type: 'text', placeholder: 'Where do you want to go?', ref: 'location' }),
+	      React.createElement('input', { type: 'submit', value: 'Search', onClick: this.findSwap })
+	    );
+	  }
+	});
+
+	module.exports = Intro;
+
+/***/ },
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23716,104 +23799,21 @@
 	module.exports = SwapTile;
 
 /***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-	var Router = __webpack_require__(157);
-
-	var Map = React.createClass({
-	  displayName: 'Map',
-
-	  mixins: [Router.Navigation, Router.State],
-
-	  render: function render() {
-	    return React.createElement('div', { id: 'map-canvas', style: { width: '100%', height: '100%' } });
-	  },
-
-	  componentDidMount: function componentDidMount() {
-	    var location = this.getParams().location;
-	    var geocoder = new google.maps.Geocoder();
-
-	    geocoder.geocode({ address: String(location) }, function (results, status) {
-	      if (status === google.maps.GeocoderStatus.OK) {
-	        console.log('everything is ok');
-	        var lat = results[0].geometry.location.lat(),
-	            lng = results[0].geometry.location.lng();
-	        var center = {
-	          lat: lat,
-	          lng: lng
-	        };
-
-	        var mapOptions = {
-	          center: center,
-	          zoom: 13
-	        };
-	        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	      } else {
-	        console.log('Google maps could not find location');
-	      }
-	    });
-	  }
-	});
-
-	module.exports = Map;
-
-/***/ },
-/* 202 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-	var Router = __webpack_require__(157);
-
-	var Intro = React.createClass({
-	  displayName: 'Intro',
-
-	  mixins: [Router.Navigation],
-
-	  findSwap: function findSwap() {
-	    var location = React.findDOMNode(this.refs.location).value;
-
-	    this.transitionTo('map', { location: location });
-	  },
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'intro-tile' },
-	      React.createElement(
-	        'h2',
-	        { className: 'intro-motto' },
-	        ' Be the first to discover the new old. '
-	      ),
-	      React.createElement('input', { type: 'text', placeholder: 'Where do you want to go?', ref: 'location' }),
-	      React.createElement('input', { type: 'submit', value: 'Search', onClick: this.findSwap })
-	    );
-	  }
-	});
-
-	module.exports = Intro;
-
-/***/ },
 /* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var React = __webpack_require__(1);
 
 	var NotFound = React.createClass({
-	  displayName: 'NotFound',
+	  displayName: "NotFound",
 
 	  render: function render() {
 	    return React.createElement(
-	      'h1',
-	      null,
-	      'Sorry, page doesn\'t exist'
+	      "h1",
+	      { className: "error-page" },
+	      "Sorry, page doesn't exist :("
 	    );
 	  }
 	});

@@ -122,3 +122,10 @@ input[type="submit"] {
 ::-webkit-input-placeholder {
   text-align: center;
 }
+
+.error-page {
+  display: flex;
+  justify-content: center;
+  font-size: 12em;
+  text-align: center;
+}

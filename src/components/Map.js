@@ -27,7 +27,7 @@ var Map = React.createClass({
 
         var mapOptions = {
           center: center,
-          zoom: 13
+          zoom: 15
         };
         var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
